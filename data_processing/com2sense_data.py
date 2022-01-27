@@ -1,3 +1,4 @@
+from cProfile import label
 import os
 import sys
 import json
@@ -61,8 +62,43 @@ class Com2SenseDataProcessor(DataProcessor):
         # coming from the same complementary pair.
         # Make sure to handle if data do not have
         # labels field.
-        raise NotImplementedError("Please finish the TODO!")
-        # End of TODO.
+        examples = []
+        row_num = 0
+        fpath = os.path.join(data_dir, split+".json")
+        f = open(fpath)
+        data = json.load(f)
+        for row in data:
+            # check if labels are present in data
+            if 'label_1' in row:
+                label1 = row['label_1']
+            else:
+                label1 = None
+            if 'label_2' in row:
+                label2 = row['label_2']
+            else:
+                label2 = None
+            # compile examples
+            example1 = Coms2SenseSingleSentenceExample(
+                guid = str(row_num),
+                text = row['sent_1'],
+                label = label1,
+                domain = row['domain'],
+                scenario = row['scenario'],
+                numeracy = row['numeracy']
+            )
+            example2 = Coms2SenseSingleSentenceExample(
+                guid = str(row_num),
+                text = row['sent_2'],
+                label = label2,
+                domain = row['domain'],
+                scenario = row['scenario'],
+                numeracy = row['numeracy']
+            )
+            # store compiled examples
+            examples.append(example1)
+            examples.append(example2)
+            # iterate row index
+            row_num += 1
         ##################################################
 
         return examples
