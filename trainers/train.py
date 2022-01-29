@@ -622,16 +622,23 @@ def main():
     # sequence classification model.
 
     # TODO: Huggingface configs.
-    raise NotImplementedError("Please finish the TODO!")
+
+    # trying the bert-base-uncased model first
+    # other options:
+    # bert family...
+    # roberta family...
+    config = AutoConfig.from_pretrained('bert-base-uncased')
 
     # TODO: Tokenizer.
-    raise NotImplementedError("Please finish the TODO!")
 
+    tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+
+    model = None
     # TODO: Defines the model.
     if args.training_phase == "pretrain":
-        raise NotImplementedError("Please finish the TODO!")
+        model = AutoModel.from_config(config)
     else:
-        raise NotImplementedError("Please finish the TODO!")
+        model = AutoModelForSequenceClassification.from_config(config)
 
     # End of TODO.
     ##################################################
